@@ -13,55 +13,62 @@ function Invoke-BinarySearch
         [Parameter(Mandatory=$true,
             ValueFromPipelineByPropertyName=$true,
             Position=1)]
-        [uint64]$Find
+        [UInt64]$Find
     )
 
     Begin
     {
-        [Uint64]$Min = 0
-        [Uint64]$Max = ($array.Length) - 1
-        [Uint64]$Mid = [Math]::Round(($array.Length) / 2)
-        Write-Verbose "Starting. Startvalue min is $min"
-        Write-Verbose "Starting. Startvalue max is $max"
-        Write-Verbose "Starting. Startvalue mid is $mid"
+        [UInt64]$Min = 0
+        [UInt64]$Max = ($array.Length) - 1
+        [UInt64]$Mid = ($array.Length - 1) / 2
+        [uint64]$Itterations = 1
+        [String]$joinedArray = $Array -join ','
+        Write-Verbose "Array contains $joinedArray"
+        Write-Verbose "Starting. value in position $min of array is $($array[$min])"
+        Write-Verbose "Starting. value in position $max of array is $($array[$max])"
+        Write-Verbose "Starting. value in position $mid of array is $($array[$mid])"
+
+        $Array = $array | Sort-Object
     }
     Process
     {
         Write-Verbose 'Starting DO loop...'
         do
         {
-            IF ($Find -gt $mid)
+            $Itterations++
+
+            IF ($Find -gt $array[$mid])
                 {
                 Write-Verbose 'Target is larger than mid'
                 $Min = $Mid 
-                $Mid = [Math]::Round(($Max + $Mid) / 2)
-                Write-Verbose "New value min is $min"
-                Write-Verbose "New value max is $max"
-                Write-Verbose "New value mid is $mid"
+                $Mid = ($Max + $Min) / 2
+                Write-Verbose "New value in position min is $($array[$min])"
+                Write-Verbose "New value in position max is $($array[$max])"
+                Write-Verbose "New value in position mid is $($array[$mid])"
                 }
     
-            ELSEIF ($Find -lt $mid)
+            ELSEIF ($Find -lt $array[$mid])
                 {
                 Write-Verbose 'Target is smaller than mid'
-                $Max = $Mid 
-                $Mid = [Math]::Round(($Min + $Mid) / 2)
-                Write-Verbose "New value min is $min"
-                Write-Verbose "New value max is $max"
-                Write-Verbose "New value mid is $mid"
+                $Max = $Mid
+                $Mid = ($Max + $Min) / 2
+                Write-Verbose "New value in position min is $($array[$min])"
+                Write-Verbose "New value in position max is $($array[$max])"
+                Write-Verbose "New value in position mid is $($array[$mid])"
                 }
 
-            Write-Verbose 'Sleeping for 1 second, so we have time to follow the script...'
-            Start-Sleep -Seconds 1
+            Write-Verbose 'Sleeping for 5 second, so we have time to follow the script...'
+            Start-Sleep -Seconds 5
+
         }
-        until ($Find -eq $mid)
+        until ($Find -eq $array[$mid])
     }
     End
     {
     Write-Output 'Value found'
-    Write-Output "Value of min is $min"
-    Write-Output "Value of max is $max"
-    Write-Output "Value of mid is $mid"
     Write-Output "Targetvalue was $Find"
-    Write-Output 'Target and Mid should match..'
+    Write-Output "It is in possition $Mid"
+    Write-Output "Proved by doing 'array[mid]': $($array[$mid])"
+    Write-Output "..And we did it in $Itterations itterations!"
     }
 }
