@@ -35,16 +35,18 @@ function Invoke-BinarySearch
         Write-Verbose 'Starting DO loop...'
         do
         {
-            $Itterations++
+            
 
             IF ($Find -gt $array[$mid])
                 {
                 Write-Verbose 'Target is larger than mid'
                 $Min = $Mid 
                 $Mid = ($Max + $Min) / 2
-                Write-Verbose "New value in position min is $($array[$min])"
-                Write-Verbose "New value in position max is $($array[$max])"
-                Write-Verbose "New value in position mid is $($array[$mid])"
+                Write-Verbose "New value in position $min is $($array[$min])"
+                Write-Verbose "New value in position $max is $($array[$max])"
+                Write-Verbose "New value in position $mid is $($array[$mid])"
+
+                $Itterations++
                 }
     
             ELSEIF ($Find -lt $array[$mid])
@@ -52,9 +54,11 @@ function Invoke-BinarySearch
                 Write-Verbose 'Target is smaller than mid'
                 $Max = $Mid
                 $Mid = ($Max + $Min) / 2
-                Write-Verbose "New value in position min is $($array[$min])"
-                Write-Verbose "New value in position max is $($array[$max])"
-                Write-Verbose "New value in position mid is $($array[$mid])"
+                Write-Verbose "New value in position $min is $($array[$min])"
+                Write-Verbose "New value in position $max is $($array[$max])"
+                Write-Verbose "New value in position $mid is $($array[$mid])"
+                
+                $Itterations++
                 }
 
             Write-Verbose 'Sleeping for 5 second, so we have time to follow the script...'
